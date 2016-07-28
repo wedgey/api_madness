@@ -5,6 +5,14 @@ $(function() {
     return tr.append(td.text(city.name));
   }
 
+  function showDetails(city) {
+    $('#weatherDetails .modal-body').empty();
+    var weather = $('<img>').attr("src", city.current_observation.icon_url);
+    var feelslike = $('<p>').html("Feels like: " + city.current_observation.feelslike_c + "&deg;C" + " (" + city.current_observation.feelslike_f + "&deg;F)");
+
+    $('#weatherDetails .modal-body').append(weather);
+  }
+
   $('form').on('submit', function() {
     event.preventDefault();
     $.ajax({
@@ -18,10 +26,8 @@ $(function() {
         data.RESULTS.forEach(function(city) {
           $('table.cities-table tbody').append(addRow(city));
         })
-        console.log("i was ajaxec");
       }
     });
-    console.log("i keep running");
   });
 
   $('table.cities-table tbody').on('click', 'tr', function() {
@@ -30,14 +36,14 @@ $(function() {
       dataType: 'jsonp',
       success: function(data) {
         console.log(data);
-        var feelslike = $('<p>').html("Feels like: " + data.current_observation.feelslike_c + "&deg;C" + " (" + data.current_observation.feelslike_f + "&deg;F)");
-        var weather = $('<p>').html("Current weather: " + data.current_observation.weather);
-        var uv = $('<p>').html("UV: " + data.current_observation.UV);
-        $('#weatherDetails-label').text(data.current_observation.display_location.full);
-        $('#weatherDetails .modal-body').empty();
-        $('#weatherDetails .modal-body').append(feelslike);
-        $('#weatherDetails .modal-body').append(weather);
-        $('#weatherDetails .modal-body').append(uv);
+        // var feelslike = $('<p>').html("Feels like: " + data.current_observation.feelslike_c + "&deg;C" + " (" + data.current_observation.feelslike_f + "&deg;F)");
+        // var weather = $('<p>').html("Current weather: " + data.current_observation.weather);
+        // var uv = $('<p>').html("UV: " + data.current_observation.UV);
+        // $('#weatherDetails-label').text(data.current_observation.display_location.full);
+        // $('#weatherDetails .modal-body').append(feelslike);
+        // $('#weatherDetails .modal-body').append(weather);
+        // $('#weatherDetails .modal-body').append(uv);
+        showDetails(data);
         $('#weatherDetails').modal('toggle');
       }
     });
